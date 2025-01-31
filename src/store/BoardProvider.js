@@ -1,18 +1,83 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
+import rough from "roughjs/bin/rough";    // different way of import
+
 
 import boardContext from "./board-context";
 import { TOOL_ITEMS } from "../constants";
 
+const gen = rough.generator();
+
+const boardReducer = (state, action) => {
+  switch (action.type) {
+    case "CHANGE_TOOL":
+      return {
+        ...state,
+        activeToolItem: action.payload.tool,
+      };
+
+    case "DRAW_DOWN":
+      const prevElements = state.elements;
+      const {clientX, clientY} = action.payload;
+      const newElement = {
+        id: state.elements.length,
+        x1: clientX,
+        y1: clientY,
+        x2: clientX,
+        y2: clientY,
+        roughEle: gen.line(clientX, clientY, clientX, clientY),
+      };
+
+      return {
+        ...state,
+        elements: [...prevElements, newElement],
+      };
+
+    default:
+      return state;
+  }
+};
+
+const initialBoardState = {
+  activeToolItem: TOOL_ITEMS.LINE,
+  elements: [],
+};
+
 const BoardProvider = ({ children }) => {
-  const [activeToolItem, setActiveToolItem] = useState(TOOL_ITEMS.LINE);
+  const [boardState, dispatchBoardAction] = useReducer(
+    boardReducer,
+    initialBoardState
+  );
+
+  // const [activeToolItem, setActiveToolItem] = useState(TOOL_ITEMS.LINE);
+  // const [elements, setElements] = useState([]);
+  // Instead of directly changing state, i'll dispatch an Action 
 
   const handleToolItemClick = (tool) => {
-    setActiveToolItem(tool);
+    dispatchBoardAction({
+      type: "CHANGE_TOOL",
+      payload: {
+        tool,
+      },
+    });
   };
 
+  const boardMouseDownHandler = (event) => {
+    const {clientX, clientY} = event;
+
+    dispatchBoardAction({
+      type: "DRAW_DOWN",
+      payload: {
+        clientX,
+        clientY,
+      }
+    })
+  }
+
   const boardContextValue = {
-    activeToolItem,
+    activeToolItem: boardState.activeToolItem,
+    elements: boardState.elements,
     handleToolItemClick,
+    boardMouseDownHandler,
   };
 
   return (
