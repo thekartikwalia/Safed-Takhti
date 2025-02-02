@@ -1,7 +1,7 @@
 import { useContext, useEffect, useLayoutEffect, useRef } from "react";
 import rough from "roughjs";
 import boardContext from "../../store/board-context";
-import { TOOL_ACTION_TYPES, TOOL_ITEMS } from "../../constants";
+import { TOOL_ITEMS } from "../../constants";
 import toolboxContext from "../../store/toolbox-context";
 
 function Board() {
@@ -10,7 +10,6 @@ function Board() {
     elements,
     boardMouseDownHandler,
     boardMouseMoveHandler,
-    toolActionType,
     boardMouseUpHandler,
   } = useContext(boardContext);
   const { toolboxState } = useContext(toolboxContext);
@@ -51,11 +50,11 @@ function Board() {
           roughCanvas.draw(element.roughEle); // draw expects element as an object
           break;
 
-        // Don't use rough library in case of BRUSH tool 
+        // Don't use rough library in case of BRUSH tool
         case TOOL_ITEMS.BRUSH:
           context.fillStyle = element.stroke;
           context.fill(element.path);
-          context.restore();    // Bcoz jab mai fillStyle change krunga toh har cheez ki fillStyle change hojayegi
+          context.restore(); // Bcoz jab mai fillStyle change krunga toh har cheez ki fillStyle change hojayegi
           break;
 
         default:
@@ -75,9 +74,7 @@ function Board() {
 
   // Mekro move tabhi karna hai jab mera toolActionType DRAWING ho (mtlb CLICK ho chuka ho)
   const handleMouseMove = (event) => {
-    if (toolActionType === TOOL_ACTION_TYPES.DRAWING) {
-      boardMouseMoveHandler(event);
-    }
+    boardMouseMoveHandler(event);
   };
 
   const handleMouseUp = () => {
@@ -86,8 +83,9 @@ function Board() {
 
   return (
     <canvas
-      style={{ border: "1px solid black" }}
+      // style={{ border: "1px solid black" }}
       ref={canvasRef}
+      id="canvas"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}

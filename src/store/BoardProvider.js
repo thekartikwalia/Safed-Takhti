@@ -36,7 +36,7 @@ const boardReducer = (state, action) => {
 
       return {
         ...state,
-        toolActionType: TOOL_ACTION_TYPES.DRAWING,    // On CLICK, change it to "DRAWING"
+        toolActionType: TOOL_ACTION_TYPES.DRAWING, // On CLICK, change it to "DRAWING"
         elements: [...prevElements, newElement],
       };
     }
@@ -103,10 +103,11 @@ const boardReducer = (state, action) => {
 
     case BOARD_ACTIONS.ERASE: {
       const { clientX, clientY } = action.payload;
-      const newElements = [...state.elements];
+      let newElements = [...state.elements];
       newElements = newElements.filter((element) => {
         return !isPointNearElement(element, clientX, clientY); // ! bcoz if it's near, then we've to delete it
       });
+
       return {
         ...state,
         elements: newElements,
@@ -119,7 +120,7 @@ const boardReducer = (state, action) => {
 };
 
 const initialBoardState = {
-  activeToolItem: TOOL_ITEMS.LINE,
+  activeToolItem: TOOL_ITEMS.BRUSH,
   toolActionType: TOOL_ACTION_TYPES.NONE, // Initialise with "NONE" (not drawing, mouse hasn't been CLICKED yet)
   elements: [],
 };
@@ -146,14 +147,14 @@ const BoardProvider = ({ children }) => {
   const boardMouseDownHandler = (event, toolboxState) => {
     const { clientX, clientY } = event;
 
-    if(boardState.activeToolItem === TOOL_ITEMS.ERASER) {
+    if (boardState.activeToolItem === TOOL_ITEMS.ERASER) {
       dispatchBoardAction({
         type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
         payload: {
           actionType: TOOL_ACTION_TYPES.ERASING,
-        }
+        },
       });
-      return;    // if erasing, return from here itself
+      return; // if erasing, return from here itself
     }
 
     dispatchBoardAction({
@@ -196,7 +197,7 @@ const BoardProvider = ({ children }) => {
       type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
       payload: {
         actionType: TOOL_ACTION_TYPES.NONE,
-      }
+      },
     });
   };
 
