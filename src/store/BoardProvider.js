@@ -104,6 +104,22 @@ const boardReducer = (state, action) => {
       }
     }
 
+    // Push new element state in history
+    // Don't always push at end, push right after current index (i.e. current_index + 1)
+    // And remove the forward history (if we draw on UNDO, we can't REDO)
+    case BOARD_ACTIONS.DRAW_UP: {
+      const elementsCopy = [...state.elements];
+      const newHistory = state.history.slice(0, state.index + 1);
+      newHistory.push(elementsCopy);
+
+      return {
+        ...state,
+        history: newHistory,
+        index: state.index + 1,
+      };
+    }
+
+    // On ERASE as well, we need to deal with History (bcoz ERASE is equivalent to adding a new state)
     case BOARD_ACTIONS.ERASE: {
       const { clientX, clientY } = action.payload;
       let newElements = [...state.elements];
@@ -111,21 +127,53 @@ const boardReducer = (state, action) => {
         return !isPointNearElement(element, clientX, clientY); // ! bcoz if it's near, then we've to delete it
       });
 
+      const newHistory = state.history.slice(0, state.index + 1);
+      newHistory.push(newElements);
+
       return {
         ...state,
         elements: newElements,
+        history: newHistory,
+        index: state.index + 1,
       };
     }
 
+    // I'm creating new element on TEXT as well (not only by DRAWING)
     case BOARD_ACTIONS.CHANGE_TEXT: {
-      const index = state.elements.length-1;
+      const index = state.elements.length - 1;
       const newElements = [...state.elements];
       newElements[index].text = action.payload.text;
+
+      const newHistory = state.history.slice(0, state.index + 1);
+      newHistory.push(newElements);
+
       return {
         ...state,
-        toolActionType: TOOL_ACTION_TYPES.NONE,    // bcoz i've blurred it now 
+        toolActionType: TOOL_ACTION_TYPES.NONE, // bcoz i've blurred it now
         elements: newElements,
-      }
+        history: newHistory,
+        index: state.index + 1,
+      };
+    }
+
+    case BOARD_ACTIONS.UNDO: {
+      if (state.index <= 0) return state; // do nothing (if at begining of history)
+
+      return {
+        ...state,
+        elements: state.history[state.index - 1],
+        index: state.index - 1,
+      };
+    }
+
+    case BOARD_ACTIONS.REDO: {
+      if (state.index >= state.history.length - 1) return state; // do nothing (if at end of history)
+
+      return {
+        ...state,
+        elements: state.history[state.index + 1],
+        index: state.index + 1,
+      };
     }
 
     default:
@@ -137,6 +185,8 @@ const initialBoardState = {
   activeToolItem: TOOL_ITEMS.BRUSH,
   toolActionType: TOOL_ACTION_TYPES.NONE, // Initialise with "NONE" (not drawing, mouse hasn't been CLICKED yet)
   elements: [],
+  history: [[]],
+  index: 0,
 };
 
 const BoardProvider = ({ children }) => {
@@ -156,9 +206,9 @@ const BoardProvider = ({ children }) => {
 
   const boardMouseDownHandler = (event, toolboxState) => {
     // Jab mai dusri baar click kar raha hun
-    // tab mujhe wapas DRAW_DOWN call nahi karna 
-    // tab mai already WRITING state mei hun 
-    if(boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
+    // tab mujhe wapas DRAW_DOWN call nahi karna
+    // tab mai already WRITING state mei hun
+    if (boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
 
     const { clientX, clientY } = event;
 
@@ -186,7 +236,7 @@ const BoardProvider = ({ children }) => {
 
   // Mekro move tabhi karna hai jab mera toolActionType DRAWING ho (mtlb CLICK ho chuka ho)
   const boardMouseMoveHandler = (event) => {
-    if(boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
+    if (boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
 
     const { clientX, clientY } = event;
 
@@ -209,8 +259,15 @@ const BoardProvider = ({ children }) => {
     }
   };
 
+  // New element is created on Mouse Up
+  // So, handle history here
   const boardMouseUpHandler = () => {
-    if(boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
+    if (boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
+    if (boardState.toolActionType === TOOL_ACTION_TYPES.DRAWING) {
+      dispatchBoardAction({
+        type: BOARD_ACTIONS.DRAW_UP,
+      });
+    }
 
     dispatchBoardAction({
       type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
@@ -220,13 +277,25 @@ const BoardProvider = ({ children }) => {
     });
   };
 
-  // On Blur i want to draw text out canvas 
+  // On Blur i want to draw text out canvas
   const textAreaBlurHandler = (text, toolboxState) => {
     dispatchBoardAction({
       type: BOARD_ACTIONS.CHANGE_TEXT,
       payload: {
         text,
       },
+    });
+  };
+
+  const boardUndoHandler = () => {
+    dispatchBoardAction({
+      type: BOARD_ACTIONS.UNDO,
+    });
+  };
+
+  const boardRedoHandler = () => {
+    dispatchBoardAction({
+      type: BOARD_ACTIONS.REDO,
     });
   };
 
@@ -239,6 +308,8 @@ const BoardProvider = ({ children }) => {
     boardMouseMoveHandler,
     boardMouseUpHandler,
     textAreaBlurHandler,
+    undo: boardUndoHandler,
+    redo: boardRedoHandler,
   };
 
   return (

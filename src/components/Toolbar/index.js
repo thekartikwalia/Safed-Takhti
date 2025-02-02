@@ -10,11 +10,13 @@ import { FaArrowRight } from "react-icons/fa";
 import { FaPaintBrush } from "react-icons/fa";
 import { FaEraser } from "react-icons/fa";
 import { FaFont } from "react-icons/fa";
+import { FaUndoAlt } from "react-icons/fa";
+import { FaRedoAlt } from "react-icons/fa";
 import { TOOL_ITEMS } from "../../constants";
 import boardContext from "../../store/board-context";
 
 const Toolbar = () => {
-  const { activeToolItem, changeToolHandler } = useContext(boardContext);
+  const { activeToolItem, changeToolHandler, undo, redo } = useContext(boardContext);
 
   return (
     <div className={classes.container}>
@@ -73,6 +75,18 @@ const Toolbar = () => {
         onClick={() => changeToolHandler(TOOL_ITEMS.TEXT)}
       >
         <FaFont />
+      </div>
+      <div
+        className={classes.toolItem}
+        onClick={undo}
+      >
+        <FaUndoAlt />
+      </div>
+      <div
+        className={classes.toolItem}
+        onClick={redo}
+      >
+        <FaRedoAlt />
       </div>
     </div>
   );
