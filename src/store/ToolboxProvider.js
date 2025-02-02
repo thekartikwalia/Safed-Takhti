@@ -53,7 +53,7 @@ const initialToolboxState = {
   },
   [TOOL_ITEMS.TEXT]: {
     stroke: COLORS.BLACK,
-    size: 16,
+    size: 32,
   }
 };
 

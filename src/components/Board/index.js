@@ -15,6 +15,7 @@ function Board() {
     boardMouseDownHandler,
     boardMouseMoveHandler,
     boardMouseUpHandler,
+    textAreaBlurHandler,
   } = useContext(boardContext);
   const { toolboxState } = useContext(toolboxContext);
 
@@ -62,7 +63,11 @@ function Board() {
           break;
 
         case TOOL_ITEMS.TEXT:
-          console.log("Something");
+          context.textBaseline = "top";
+          context.font = `${element.size}px Caveat`;
+          context.fillStyle = element.stroke;
+          context.fillText(element.text, element.x1, element.y1);
+          context.restore();
           break;
 
         default:
@@ -87,6 +92,7 @@ function Board() {
       }, 0);
     }
   }, [toolActionType]);
+  // On Blur i want to draw it on canvas 
 
   const handleMouseDown = (event) => {
     boardMouseDownHandler(event, toolboxState);
@@ -114,7 +120,7 @@ function Board() {
             fontSize: `${elements[elements.length - 1]?.size}px`,
             color: elements[elements.length - 1]?.stroke,
           }}
-          // onBlur={(event) => textAreaBlur(event.target.value)}
+          onBlur={(event) => textAreaBlurHandler(event.target.value, toolboxState)}
         />
       )}
       <canvas
