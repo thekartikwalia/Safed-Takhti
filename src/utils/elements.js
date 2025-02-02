@@ -100,6 +100,11 @@ export const createRoughElement = (
       return brushElement;
     }
 
+    case TOOL_ITEMS.TEXT: {
+      element.text = "";
+      return element;
+    }
+
     default:
       throw new Error("Type not recognised");
   }

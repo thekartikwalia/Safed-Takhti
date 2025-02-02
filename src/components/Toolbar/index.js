@@ -9,6 +9,7 @@ import { FaRegCircle } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
 import { FaPaintBrush } from "react-icons/fa";
 import { FaEraser } from "react-icons/fa";
+import { FaFont } from "react-icons/fa";
 import { TOOL_ITEMS } from "../../constants";
 import boardContext from "../../store/board-context";
 
@@ -64,6 +65,14 @@ const Toolbar = () => {
         onClick={() => changeToolHandler(TOOL_ITEMS.ERASER)}
       >
         <FaEraser />
+      </div>
+      <div
+        className={cx(classes.toolItem, {
+          [classes.active]: activeToolItem === TOOL_ITEMS.TEXT,
+        })}
+        onClick={() => changeToolHandler(TOOL_ITEMS.TEXT)}
+      >
+        <FaFont />
       </div>
     </div>
   );

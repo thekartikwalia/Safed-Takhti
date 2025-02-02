@@ -36,7 +36,10 @@ const boardReducer = (state, action) => {
 
       return {
         ...state,
-        toolActionType: TOOL_ACTION_TYPES.DRAWING, // On CLICK, change it to "DRAWING"
+        toolActionType:
+          state.activeToolItem === TOOL_ITEMS.TEXT
+            ? TOOL_ACTION_TYPES.WRITING
+            : TOOL_ACTION_TYPES.DRAWING, // On CLICK, change it to "DRAWING"
         elements: [...prevElements, newElement],
       };
     }
@@ -131,10 +134,6 @@ const BoardProvider = ({ children }) => {
     initialBoardState
   );
 
-  // const [activeToolItem, setActiveToolItem] = useState(TOOL_ITEMS.LINE);
-  // const [elements, setElements] = useState([]);
-  // Instead of directly changing state, i'll dispatch an Action
-
   const changeToolHandler = (tool) => {
     dispatchBoardAction({
       type: BOARD_ACTIONS.CHANGE_TOOL,
@@ -145,6 +144,11 @@ const BoardProvider = ({ children }) => {
   };
 
   const boardMouseDownHandler = (event, toolboxState) => {
+    // Jab mai dusri baar click kar raha hun
+    // tab mujhe wapas DRAW_DOWN call nahi karna 
+    // tab mai already WRITING state mei hun 
+    if(boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
+
     const { clientX, clientY } = event;
 
     if (boardState.activeToolItem === TOOL_ITEMS.ERASER) {
@@ -171,6 +175,8 @@ const BoardProvider = ({ children }) => {
 
   // Mekro move tabhi karna hai jab mera toolActionType DRAWING ho (mtlb CLICK ho chuka ho)
   const boardMouseMoveHandler = (event) => {
+    if(boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
+
     const { clientX, clientY } = event;
 
     if (boardState.toolActionType === TOOL_ACTION_TYPES.DRAWING) {
@@ -193,6 +199,8 @@ const BoardProvider = ({ children }) => {
   };
 
   const boardMouseUpHandler = () => {
+    if(boardState.toolActionType === TOOL_ACTION_TYPES.WRITING) return;
+
     dispatchBoardAction({
       type: BOARD_ACTIONS.CHANGE_ACTION_TYPE,
       payload: {
