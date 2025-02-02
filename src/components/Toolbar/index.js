@@ -7,6 +7,7 @@ import { FaSlash } from "react-icons/fa";
 import { LuRectangleHorizontal } from "react-icons/lu";
 import { FaRegCircle } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
+import { FaPaintBrush } from "react-icons/fa";
 import { TOOL_ITEMS } from "../../constants";
 import boardContext from "../../store/board-context";
 
@@ -15,6 +16,14 @@ const Toolbar = () => {
 
   return (
     <div className={classes.container}>
+      <div
+        className={cx(classes.toolItem, {
+          [classes.active]: activeToolItem === TOOL_ITEMS.BRUSH,
+        })}
+        onClick={() => changeToolHandler(TOOL_ITEMS.BRUSH)}
+      >
+        <FaPaintBrush />
+      </div>
       <div
         className={cx(classes.toolItem, {
           [classes.active]: activeToolItem === TOOL_ITEMS.LINE,

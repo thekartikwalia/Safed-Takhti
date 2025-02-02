@@ -1,7 +1,8 @@
 import { ARROW_LENGTH, TOOL_ITEMS } from "../constants";
 
 import rough from "roughjs/bin/rough"; // different way of import
-import { getArrowHeadsCoordinates } from "./math";
+import { getArrowHeadsCoordinates, getSvgPathFromStroke } from "./math";
+import getStroke from "perfect-freehand";
 
 const gen = rough.generator();
 
@@ -85,6 +86,18 @@ export const createRoughElement = (
       ];
       element.roughEle = gen.linearPath(points_sequence, options);
       return element;
+    }
+
+    case TOOL_ITEMS.BRUSH: {
+      // Brush ke case mei elements mei points honge (as Array of Objects)
+      const brushElement = {
+        id,
+        points: [{ x: x1, y: y1 }],
+        path: new Path2D(getSvgPathFromStroke(getStroke([{ x: x1, y: y1 }]))),    // path bnane ka treka hota hai new Path2D()
+        type,
+        stroke,
+      };
+      return brushElement;
     }
 
     default:
