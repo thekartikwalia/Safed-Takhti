@@ -6,13 +6,24 @@ import { getArrowHeadsCoordinates } from "./math";
 const gen = rough.generator();
 
 // Utility function joki merko naya element bnake dega based on co-ordinates
-export const createRoughElement = (id, x1, y1, x2, y2, { type }) => {
+export const createRoughElement = (
+  id,
+  x1,
+  y1,
+  x2,
+  y2,
+  { type, stroke, fill, size }
+) => {
   const element = {
     id,
     x1,
     y1,
     x2,
     y2,
+    type,
+    stroke,
+    fill,
+    size,
   };
 
   // RoughJs baar baar nayi handwritten-style generate kar raha hai, decreases user experience
@@ -20,8 +31,19 @@ export const createRoughElement = (id, x1, y1, x2, y2, { type }) => {
   // At time of making element, you can give it options
   let options = {
     seed: id + 1, // +1 bcoz seed can't be 0 (but we're passing index also as id in case of RECTANGLE)
+    fillStyle: "solid",
   };
   // On providing options, it won't generate new handwritten style, instead it'll take from seed
+
+  if (stroke) {
+    options.stroke = stroke;
+  }
+  if (fill) {
+    options.fill = fill;
+  }
+  if (size) {
+    options.strokeWidth = size;
+  }
 
   switch (type) {
     case TOOL_ITEMS.LINE: {
@@ -46,7 +68,13 @@ export const createRoughElement = (id, x1, y1, x2, y2, { type }) => {
     }
 
     case TOOL_ITEMS.ARROW: {
-      const { x3, y3, x4, y4 } = getArrowHeadsCoordinates(x1, y1, x2, y2, ARROW_LENGTH);
+      const { x3, y3, x4, y4 } = getArrowHeadsCoordinates(
+        x1,
+        y1,
+        x2,
+        y2,
+        ARROW_LENGTH
+      );
 
       const points_sequence = [
         [x1, y1],
