@@ -28,4 +28,9 @@ export function getSvgPathFromStroke(stroke) {
 
   d.push("Z")
   return d.join(" ")
-}
+};
+
+
+export const isPointNearElement = (element, pointX, pointY) => {
+  return false;
+};
