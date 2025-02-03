@@ -140,7 +140,7 @@ function Board() {
             color: elements[elements.length - 1]?.stroke,
           }}
           onBlur={(event) =>
-            textAreaBlurHandler(event.target.value, toolboxState)
+            textAreaBlurHandler(event.target.value)
           }
         />
       )}
