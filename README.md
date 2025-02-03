@@ -1,70 +1,124 @@
-# Getting Started with Create React App
+# Sketch-It ✏️
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A dynamic, feature-rich whiteboard application built with React and HTML5 Canvas that enables real-time drawing, sketching, and collaborative design work.
 
-## Available Scripts
+## Features 🎨
 
-In the project directory, you can run:
+- **Multiple Drawing Tools**
+  - Line tool with customizable stroke
+  - Rectangle and ellipse shapes
+  - Arrow tool for annotations
+  - Freehand brush for natural drawing
+  - Text tool with adjustable positioning
 
-### `npm start`
+- **Advanced Editing Capabilities**
+  - Eraser tool with precision control
+  - Undo/Redo functionality
+  - Color picker for unlimited creativity
+  - Adjustable stroke width
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **User-Friendly Interface**
+  - Clean, intuitive toolbar
+  - Responsive canvas design
+  - Download functionality for saving work
+  - Smooth drawing experience
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tech Stack 💻
 
-### `npm test`
+- **Frontend Framework:** React.js
+- **Styling:** Tailwind CSS
+- **Drawing Libraries:**
+  - Perfect Freehand - Provides smooth, natural brush strokes
+  - Rough.js - Creates hand-drawn, sketchy style graphics
+- **State Management:** React Context API
+- **Deployment:** Vercel
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation 🚀
 
-### `npm run build`
+1. Clone the repository:
+```bash
+git clone https://github.com/thekartikwalia/sketch-it.git
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Navigate to the project directory:
+```bash
+cd sketch-it
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Install dependencies:
+```bash
+npm install
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. Start the development server:
+```bash
+npm run dev
+```
 
-### `npm run eject`
+## Usage 🖱️
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Select a tool from the toolbar (line, rectangle, ellipse, arrow, brush, or text)
+2. Choose your preferred color using the color picker
+3. Click and drag on the canvas to draw
+4. Use the eraser tool to remove unwanted elements
+5. Utilize undo/redo buttons to manage your changes
+6. Download your creation when finished
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Implementation Details 🛠️
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Implemented custom state management using React's Context API and useReducer for optimal performance
+- Utilized useLayoutEffect for synchronous DOM mutations in shape rendering
+- Handled complex mouse events for smooth drawing experience
+- Integrated RoughJS for creating hand-drawn style elements
+- Used Perfect Freehand for natural-looking brush strokes
+- Managed tool states using a dedicated ToolActionType system
+- Implemented history management for undo/redo functionality
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Recent Updates 🆕
 
-## Learn More
+- Added download functionality for saving work
+- Implemented color picker with enhanced UI
+- Fixed text erasing functionality using measureText
+- Added undo/redo system with history state management
+- Improved brush tool with multiple stroke options
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Future Scope 🔮
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Real-time Collaboration**
+  - Implement WebSocket integration for live multi-user drawing sessions
+  - Add user cursors and presence indicators
+  - Enable real-time chat between collaborators
+  - Implement room-based collaboration system
 
-### Code Splitting
+- **Enhanced Features**
+  - Add shape manipulation (resize, rotate, move)
+  - Implement layers system for better organization
+  - Add custom templates and stickers
+  - Enable cloud storage for saving boards
+  - Add export options in multiple formats (PNG, SVG, PDF)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **User Management**
+  - Implement user authentication
+  - Add personal dashboard for saved boards
+  - Enable board sharing and permissions management
+  - Add feature to create teams and organize boards
 
-### Analyzing the Bundle Size
+## Contributing 🤝
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-### Making a Progressive Web App
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## License 📝
 
-### Advanced Configuration
+This project is open source and available under the [MIT License](LICENSE).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Contact 📧
 
-### Deployment
+Kartik Walia - [GitHub](https://github.com/thekartikwalia)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Project Link: [https://github.com/thekartikwalia/sketch-it](https://github.com/thekartikwalia/sketch-it)
