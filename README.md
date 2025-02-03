@@ -1,4 +1,4 @@
-# Sketch-It ✏️
+# Safed-Takhti ✏️
 
 A dynamic, feature-rich whiteboard application built with React and HTML5 Canvas that enables real-time drawing, sketching, and collaborative design work.
 
