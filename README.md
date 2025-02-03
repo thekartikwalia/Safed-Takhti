@@ -36,24 +36,24 @@ A dynamic, feature-rich whiteboard application built with React and HTML5 Canvas
 ## Installation 🚀
 
 1. Clone the repository:
-```bash
-git clone https://github.com/thekartikwalia/sketch-it.git
-```
+    ```bash
+    git clone https://github.com/thekartikwalia/sketch-it.git
+    ```
 
 2. Navigate to the project directory:
-```bash
-cd sketch-it
-```
+    ```bash
+    cd sketch-it
+    ```
 
 3. Install dependencies:
-```bash
-npm install
-```
+    ```bash
+    npm install
+    ```
 
 4. Start the development server:
-```bash
-npm run dev
-```
+    ```bash
+    npm run dev
+    ```
 
 ## Usage 🖱️
 
