@@ -16,6 +16,8 @@ function Board() {
     boardMouseMoveHandler,
     boardMouseUpHandler,
     textAreaBlurHandler,
+    undo,
+    redo,
   } = useContext(boardContext);
   const { toolboxState } = useContext(toolboxContext);
 
@@ -24,6 +26,23 @@ function Board() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   }, []);
+
+  useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.ctrlKey && event.key === "z") {
+        undo();
+      } else if (event.ctrlKey && event.key === "y") {
+        redo();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    // At time of unmount, always use CLEANUP function (to avoid unexpected behaviour)
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [undo, redo]); // wrap both with useCallback to handle their "Referential Equality"
 
   // useLayoutEffect hook is almost identical to 'useEffect', but it fires
   // synchronously after all DOM mutations.It's used to read layout from DOM and
@@ -92,7 +111,7 @@ function Board() {
       }, 0);
     }
   }, [toolActionType]);
-  // On Blur i want to draw it on canvas 
+  // On Blur i want to draw it on canvas
 
   const handleMouseDown = (event) => {
     boardMouseDownHandler(event, toolboxState);
@@ -120,7 +139,9 @@ function Board() {
             fontSize: `${elements[elements.length - 1]?.size}px`,
             color: elements[elements.length - 1]?.stroke,
           }}
-          onBlur={(event) => textAreaBlurHandler(event.target.value, toolboxState)}
+          onBlur={(event) =>
+            textAreaBlurHandler(event.target.value, toolboxState)
+          }
         />
       )}
       <canvas
