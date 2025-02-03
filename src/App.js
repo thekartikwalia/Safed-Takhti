@@ -4,15 +4,20 @@ import Toolbox from "./components/Toolbox";
 import BoardProvider from "./store/BoardProvider";
 import ToolboxProvider from "./store/ToolboxProvider";
 
+import { Analytics } from "@vercel/analytics/react";
+
 function App() {
   return (
-    <BoardProvider>
-      <ToolboxProvider>
-        <Toolbar />
-        <Board />
-        <Toolbox />
-      </ToolboxProvider>
-    </BoardProvider>
+    <div>
+      <BoardProvider>
+        <ToolboxProvider>
+          <Toolbar />
+          <Board />
+          <Toolbox />
+        </ToolboxProvider>
+      </BoardProvider>
+      <Analytics />
+    </div>
   );
 }
 
