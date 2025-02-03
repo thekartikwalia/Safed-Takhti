@@ -49,10 +49,41 @@ export const isPointNearElement = (element, pointX, pointY) => {
       );
 
     // isPointInPath() method => https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/isPointInPath
-    case TOOL_ITEMS.BRUSH:
+    case TOOL_ITEMS.BRUSH: {
       const canvas = document.getElementById("canvas");
       const context = canvas.getContext("2d");
       return context.isPointInPath(element.path, pointX, pointY);
+    }
+    
+    case TOOL_ITEMS.TEXT: {
+      const canvas = document.getElementById("canvas");
+      const context = canvas.getContext("2d");
+      context.font = `${element.size}px Caveat`;
+      context.fillStyle = element.stroke;
+      const textWidth = context.measureText(element.text).width;
+      const textHeight = parseInt(element.size); // parseInt bcoz it returns string
+      context.restore();
+      return (
+        isPointCloseToLine(x1, y1, x1 + textWidth, y1, pointX, pointY) ||
+        isPointCloseToLine(x1, y1, x1, y1 + textHeight, pointX, pointY) ||
+        isPointCloseToLine(
+          x1,
+          y1 + textHeight,
+          x1 + textWidth,
+          y1 + textHeight,
+          pointX,
+          pointY
+        ) ||
+        isPointCloseToLine(
+          x1 + textWidth,
+          y1,
+          x1 + textWidth,
+          y1 + textHeight,
+          pointX,
+          pointY
+        )
+      );
+    }
 
     default:
       throw new Error("Type not recognized");
